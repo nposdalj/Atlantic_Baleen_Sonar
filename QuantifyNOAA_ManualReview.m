@@ -1,8 +1,8 @@
 close all; clear; clc;
 
-parentDir = 'L:\.shortcut-targets-by-id\1NHK8ZRtCbvo4cicsapyJzWLfPTWFfpQ0\NAVFAC_REPORT_FIGURES\HAT\data\01_DATA_INPUTS\HUMPBACK';
-species   = 'HUMPBACK';
-saveDir   = 'Z:\Atlantic_Baleen_Sonar\HAT\Concatenated_NOAA_Logs';
+parentDir = 'L:\.shortcut-targets-by-id\1NHK8ZRtCbvo4cicsapyJzWLfPTWFfpQ0\NAVFAC_REPORT_FIGURES\NFC\data\01_DATA_INPUTS\SEI';
+species   = 'SEI';
+saveDir   = 'Z:\Atlantic_Baleen_Sonar\NFC\Concatenated_NOAA_Logs';
 
 files = dir(fullfile(parentDir, '**', '*.csv'));
 
