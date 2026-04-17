@@ -7,7 +7,7 @@
 % logger_timeseries_plotting_v3.m scripts
 
 clear all
-close all
+% close all
 
 
 %% User-Defined Settings
@@ -135,8 +135,8 @@ SaveDataPath = ['X:\Atlantic_Baleen_Sonar\HAT\Binned_data'];
 
 disp('Loading logger files...');
 fileList = cellstr(ls(IDpath));
-% fileMatchIdx = find(~cellfun(@isempty, regexp(fileList, filePrefix))); % for all other baleen whales
-fileMatchIdx = find(~cellfun(@isempty, regexp(fileList, keyWord1))); % for humpbacks
+fileMatchIdx = find(~cellfun(@isempty, regexp(fileList, filePrefix))); % for all other baleen whales
+% fileMatchIdx = find(~cellfun(@isempty, regexp(fileList, keyWord1))); % for humpbacks
 matchingFile = fileList(fileMatchIdx);
 
 logger_table = [];
@@ -166,14 +166,19 @@ end
 % end
 
 % create an end time for logs with just a start time
-% no_end_idx = find(isnat(logger_table.EndTime));
-% logger_table.EndTime(no_end_idx)=logger_table.StartTime(no_end_idx)+seconds(1); % add one second to the start time, assuming that only start times are on the call level
+if iscell(logger_table.EndTime) % make the end times a date instead of a cell
+    logger_table.EndTime = datetime(logger_table.EndTime, 'InputFormat', 'yyyy-MM-dd HH:mm:ss');
+end
+no_end_idx = find(isnat(logger_table.EndTime));
+logger_table.EndTime(no_end_idx)=logger_table.StartTime(no_end_idx)+seconds(1); % add one second to the start time, assuming that only start times are on the call level
 
 if ~isempty(logger_table)
     logger_table.Properties.VariableNames = {'StartTime', 'EndTime'};
 else
     disp("Logger table empty.");
 end
+
+
 
 %%
 % Save logger table
@@ -233,7 +238,18 @@ full_table = [full_table, whaleBinData];
 disp([SpName,' added to full table']);
 
 %% save large table
-loggerMatFileName = fullfile(SaveDataPath, 'Baleen_MFA_table_1hr_bins.mat');
+loggerMatFileName = fullfile(SaveDataPath, [SiteName,'_Baleen_MFA_table_1hr_bins.mat']);
 save(loggerMatFileName, 'full_table');
+
+% explore sums of each baleen whale hour bins:
+sum(full_table.Sei)
+sum(full_table.Blue)
+sum(full_table.Fin)
+sum(full_table.Minke)
+sum(full_table.Humpback)
+sum(full_table.NARW)
+
+
+
 
 
