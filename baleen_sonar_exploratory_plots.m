@@ -207,7 +207,8 @@ before_table.Relate_sonar = repmat(1,size(before_table,1),1); % mark 1 for befor
 both_table.Relate_sonar = repmat(2,size(both_table,1),1); % mark 2 for during a sonar pos. hour
 
 after_idx = find(full_table.AllWhales>0 & full_table.MFA==1)+1; % get all of the hours after a sonar pos. hour (treating each sonar hour as an individual event)
-true_after_idx = setdiff(after_idx,sonar_idx);
+updated_sonar_idx = [before_idx; sonar_idx]; % for instances when the there is one hour break between sonar pos. hours that hr. is designated as the before and after, so get rid of this repeat
+true_after_idx = setdiff(after_idx,updated_sonar_idx);
 after_table = full_table(true_after_idx,:);
 after_table.Relate_sonar = repmat(3,size(after_table,1),1); % mark 3 for after a sonar pos. hour
 
@@ -229,9 +230,6 @@ nfc_mfa_table = sortrows(sonar_event_table(nfc_idx(:,1),:));
 
 %% plot 
 
-
-%%
-
 mfa_colors = [
     0.80 0.95 0.80   % very light green
     0.98 0.80 0.80   % very light red (soft pink)
@@ -246,9 +244,9 @@ speciesColors = [
     0.60 0.40 0.70   % purple
 ];
 
-hours = nfc_mfa_table.Time;
-mfa = nfc_mfa_table.Relate_sonar;
-species = nfc_mfa_table{:,2:7};
+hours = hat_mfa_table.Time;
+mfa = hat_mfa_table.Relate_sonar;
+species = hat_mfa_table{:,2:7};
 species_name = ["Sei","Minke","Blue","NARW","Fin","Humpback"];
 
 numSpecies = size(species,2);
@@ -283,7 +281,7 @@ yticklabels(string(hours))
 
 xlabel('Species')
 ylabel('Hour')
-title('NFC - Whale Presence with MFA Context')
+title('HAT - Whale Presence with MFA Context')
 
 hold on
 for x = 0.5:1:numSpecies+0.5
