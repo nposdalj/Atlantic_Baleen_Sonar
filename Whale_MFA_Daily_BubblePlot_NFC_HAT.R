@@ -15,7 +15,7 @@ library(grid)
 # ------------------------------------------------------------
 # USER SETTINGS
 # ------------------------------------------------------------
-site <- "HAT"   # "HAT" or "NFC"
+site <- "NFC"   # "HAT" or "NFC"
 
 species_colors <- c(
   "Humpback" = "#CC79A7",
@@ -508,7 +508,7 @@ stacked_plot <- ggplot(stacked_data,
     y = "Total Overlap Days",
     fill = "Species"
   ) +
-  
+   
   theme_minimal(base_size = 11) +
   theme(
     panel.grid = element_blank(),
@@ -519,7 +519,7 @@ stacked_plot <- ggplot(stacked_data,
 ggsave(
   filename = file.path(out_dir, paste0(site, "_overlap_stacked_bar.png")),
   plot = stacked_plot,
-  width = ifelse(site == "HAT", 12, 8),
-  height = 6,
+  width = 12,
+  height = 3.5,
   units = "in"
 )
