@@ -19,6 +19,10 @@ min_freq = [30, 999, 35, 150, 50 ];
 max_freq = [100, 999, 80, 175, 150 ];
 call_dur = [2, 999, 1, 60, 2];
 
+% these call parameters were set from the examples and notes in the
+% training ppt: Frosty:\MBARC_ALL\Training\Logging 
+
+% for the blue whale call types
 blue_calls = ["A N Atlantic","Arch Sound"];
 blue_min_freq = [16,35];
 blue_max_freq = [20,70];
@@ -38,8 +42,8 @@ for j = 1:length(my_species)
             out = table(); % preallocate
             blue_call_data = this_sp_data(this_sp_data.Call==blue_calls(n),:);
 
-            st = [blue_call_data.EventNumber];
-            ed = [blue_call_data.EventNumber+seconds(blue_call_dur(n))];
+            st = [blue_call_data.StartTime];
+            ed = [blue_call_data.StartTime+seconds(blue_call_dur(n))];
             out.start_time = (st);
             out.end_time = (ed);
             out.start_time.Format = 'yyyy-MM-dd HH:mm:ss';
@@ -48,14 +52,17 @@ for j = 1:length(my_species)
             out.label = repmat(blue_calls(n),height(out),1);
             out.min_frequency = repmat(blue_min_freq(n),height(out),1);
             out.max_frequency = repmat(blue_max_freq(n),height(out),1);
+            out.wav_file_path = this_sp_data.InputFile;
+            out.start_time_sec = posixtime(st);
+            out.end_time_sec = posixtime(ed);
 
             wmv_data = [wmv_data; out];
         end
 
     elseif ~isempty(this_sp_data)
 
-        st = [this_sp_data.EventNumber];
-        ed = [this_sp_data.EventNumber+seconds(call_dur(j))];
+        st = [this_sp_data.StartTime];
+        ed = [this_sp_data.StartTime+seconds(call_dur(j))]; % create end times
         out.start_time = (st);
         out.end_time = (ed);
         out.start_time.Format = 'yyyy-MM-dd HH:mm:ss';
@@ -64,6 +71,9 @@ for j = 1:length(my_species)
         out.label = repmat(my_calls(j),height(out),1);
         out.min_frequency = repmat(min_freq(j),height(out),1);
         out.max_frequency = repmat(max_freq(j),height(out),1);
+        out.wav_file_path = this_sp_data.InputFile; % add these columns so that current detections match the column numbers of new detections
+        out.start_time_sec = posixtime(st);
+        out.end_time_sec = posixtime(ed);
 
         wmv_data = [wmv_data; out];
     end
