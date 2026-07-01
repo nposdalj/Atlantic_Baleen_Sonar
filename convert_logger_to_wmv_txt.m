@@ -8,11 +8,11 @@
 clear all
 
 % load in data:
-data = readtable('X:\Atlantic_Baleen_Sonar\NFC\Cleaned_Logs\NFC_A_02_allLF_cleaned_NP.xlsx');
+data = readtable('L:\.shortcut-targets-by-id\16p-9IwPMhrAXrlYgpF4IEGZJrjjsaTQs\Atlantic_Baleen_Summer_2026\Manual logs\HAT06A_allLF_cleaned_CMS_with_InputFile.xlsx');
 
 %%
 % df = dir('M:\Mysticetes\gray_M3_regina\*.mat');
-saveDir = 'G:\My Drive\Atlantic_Baleen_Summer_2026\Test_Whale_Moan_Viz';
+saveDir = 'L:\.shortcut-targets-by-id\16p-9IwPMhrAXrlYgpF4IEGZJrjjsaTQs\Atlantic_Baleen_Summer_2026\Eva';
 my_species = ["Bb","Bm","Bp","Ba","Eg"]; % sei, blue, fin, minke, narw
 my_calls = ["Downsweep","blueyyyyyy","40Hz","Pulse_train","Up-call"]; % calls associated with the baleen whale order, special case for blue whales with multiple call types
 min_freq = [30, 999, 35, 150, 50 ];
@@ -52,7 +52,7 @@ for j = 1:length(my_species)
             out.label = repmat(blue_calls(n),height(out),1);
             out.min_frequency = repmat(blue_min_freq(n),height(out),1);
             out.max_frequency = repmat(blue_max_freq(n),height(out),1);
-            out.wav_file_path = this_sp_data.InputFile;
+            out.wav_file_path = blue_call_data.InputFile;
             out.start_time_sec = posixtime(st);
             out.end_time_sec = posixtime(ed);
 
@@ -82,7 +82,7 @@ end
 
 
 %% save data
-outname = [saveDir,'\NFC_A_02_WMVZ.txt'];
+outname = [saveDir,'\HAT_A_06_WMVZ.txt'];
 writetable(wmv_data,[outname],'delimiter','\t')
 
 
