@@ -111,9 +111,9 @@ writetable(T, 'G:\My Drive\Atlantic_Baleen_Summer_2026\Test_Whale_Moan_Viz\Backu
     'QuoteStrings', false);   % <-- critical: prevents "A N Atlantic" → "\"A N Atlantic\""
 
 %%
-opts = detectImportOptions('G:\My Drive\Atlantic_Baleen_Summer_2026\Test_Whale_Moan_Viz\Backup\NFC01A_verified_Ba_NFC_A_02_spring.txt', 'Delimiter', '\t');
+opts = detectImportOptions('G:\My Drive\Atlantic_Baleen_Summer_2026\Test_Whale_Moan_Viz\Data_Backup\NFC01A_verified_Ba_NFC_A_02_spring.txt', 'Delimiter', '\t');
 opts = setvartype(opts, opts.VariableNames, 'string');  % keep ALL columns as text
-T = readtable('G:\My Drive\Atlantic_Baleen_Summer_2026\Test_Whale_Moan_Viz\Backup\NFC01A_verified_Ba_NFC_A_02_spring.txt', opts);
+T = readtable('G:\My Drive\Atlantic_Baleen_Summer_2026\Test_Whale_Moan_Viz\Data_Backup\NFC01A_verified_Ba_NFC_A_02_spring.txt', opts);
 
 get_xwavs = unique(T.wav_file_path);
 
