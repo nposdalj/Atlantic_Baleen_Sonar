@@ -26,8 +26,8 @@ call_dur = [2, 999, 1, 60, 2];
 % for the blue whale call types
 blue_calls = ["A N Atlantic","Arch Sound"];
 blue_min_freq = [16,35];
-blue_max_freq = [20,70];
-blue_call_dur = [19,7];
+blue_max_freq = [30,70];
+blue_call_dur = [19,7]; 
 
 wmv_data = [];
 
