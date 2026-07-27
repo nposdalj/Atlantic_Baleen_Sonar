@@ -8,25 +8,26 @@
 clear all
 
 % load in data:
-data = readtable('L:\.shortcut-targets-by-id\16p-9IwPMhrAXrlYgpF4IEGZJrjjsaTQs\Atlantic_Baleen_Summer_2026\Manual logs\HAT06A_allLF_cleaned_CMS_with_InputFile.xlsx');
+% data = readtable('X:\Atlantic_Baleen_Sonar\NFC\Cleaned_Logs\NFC01A_allLF_cleaned_NP.xlsx');
+data = readtable('G:\My Drive\Atlantic_Baleen_Summer_2026\Azores Data\AZORES_B_01_LF_LMB.xls');
 
 %%
 % df = dir('M:\Mysticetes\gray_M3_regina\*.mat');
-saveDir = 'L:\.shortcut-targets-by-id\16p-9IwPMhrAXrlYgpF4IEGZJrjjsaTQs\Atlantic_Baleen_Summer_2026\Eva';
+saveDir = 'G:\My Drive\Atlantic_Baleen_Summer_2026\Azores Data';
 my_species = ["Bb","Bm","Bp","Ba","Eg"]; % sei, blue, fin, minke, narw
 my_calls = ["Downsweep","blueyyyyyy","40Hz","Pulse_train","Up-call"]; % calls associated with the baleen whale order, special case for blue whales with multiple call types
-min_freq = [30, 999, 35, 150, 50 ];
-max_freq = [100, 999, 80, 175, 150 ];
+min_freq = [30, 999, 35, 160, 50 ];
+max_freq = [100, 999, 80, 180, 300 ];
 call_dur = [2, 999, 1, 60, 2];
 
 % these call parameters were set from the examples and notes in the
-% training ppt: Frosty:\MBARC_ALL\Training\Logging 
+% training ppt: Frosty:\MBARC_ALL\Training\Logging
 
 % for the blue whale call types
 blue_calls = ["A N Atlantic","Arch Sound"];
 blue_min_freq = [16,35];
-blue_max_freq = [20,70];
-blue_call_dur = [19,7];
+blue_max_freq = [30,70];
+blue_call_dur = [19,7]; 
 
 wmv_data = [];
 
@@ -42,31 +43,41 @@ for j = 1:length(my_species)
             out = table(); % preallocate
             blue_call_data = this_sp_data(this_sp_data.Call==blue_calls(n),:);
 
-            st = [blue_call_data.StartTime];
-            ed = [blue_call_data.StartTime+seconds(blue_call_dur(n))];
-            out.start_time = (st);
-            out.end_time = (ed);
-            out.start_time.Format = 'yyyy-MM-dd HH:mm:ss';
-            out.end_time.Format = 'yyyy-MM-dd HH:mm:ss';
-            out.score = repmat(1,height(out),1);
-            out.label = repmat(blue_calls(n),height(out),1);
-            out.min_frequency = repmat(blue_min_freq(n),height(out),1);
-            out.max_frequency = repmat(blue_max_freq(n),height(out),1);
-            out.wav_file_path = blue_call_data.InputFile;
-            out.start_time_sec = posixtime(st);
-            out.end_time_sec = posixtime(ed);
+            if ~isempty(blue_call_data)
+                st = [blue_call_data.StartTime];
+                if isnat(blue_call_data.EndTime)
+                    ed = [blue_call_data.StartTime+seconds(blue_call_dur(n))];
+                else
+                    ed = [blue_call_data.EndTime];
+                end
+                out.start_time = (st);
+                out.end_time = (ed);
+                out.start_time.Format = 'yyyy-MM-dd HH:mm:ss.SSS';
+                out.end_time.Format = 'yyyy-MM-dd HH:mm:ss.SSS';
+                out.score = repmat(1,height(out),1);
+                out.label = repmat(blue_calls(n),height(out),1);
+                out.min_frequency = repmat(blue_min_freq(n),height(out),1);
+                out.max_frequency = repmat(blue_max_freq(n),height(out),1);
+                out.wav_file_path = this_sp_data.InputFile;
+                out.start_time_sec = posixtime(st);
+                out.end_time_sec = posixtime(ed);
 
-            wmv_data = [wmv_data; out];
+                wmv_data = [wmv_data; out];
+            end
         end
 
     elseif ~isempty(this_sp_data)
 
         st = [this_sp_data.StartTime];
-        ed = [this_sp_data.StartTime+seconds(call_dur(j))]; % create end times
+        if isnat(this_sp_data.EndTime)
+            ed = [this_sp_data.StartTime+seconds(call_dur(j))]; % create end times
+        else
+            ed = [this_sp_data.EndTime];
+        end
         out.start_time = (st);
         out.end_time = (ed);
-        out.start_time.Format = 'yyyy-MM-dd HH:mm:ss';
-        out.end_time.Format = 'yyyy-MM-dd HH:mm:ss';
+        out.start_time.Format = 'yyyy-MM-dd HH:mm:ss.SSS';
+        out.end_time.Format = 'yyyy-MM-dd HH:mm:ss.SSS';
         out.score = repmat(1,height(out),1);
         out.label = repmat(my_calls(j),height(out),1);
         out.min_frequency = repmat(min_freq(j),height(out),1);
@@ -82,7 +93,7 @@ end
 
 
 %% save data
-outname = [saveDir,'\HAT_A_06_WMVZ.txt'];
+outname = [saveDir,'\Azores_B_01_WMV.txt'];
 writetable(wmv_data,[outname],'delimiter','\t')
 
 
